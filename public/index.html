@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Principal</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <section class='banner-header'>
+      <div class="banner-header-text">
+        <h1 class="banner-title">INFORMACIÓN PERSONAL</h1>
+      </div>
+    </section>   
+    <form action="/save" method="POST">
+      <div>
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required>
+      </div>  
+      <div>
+        <label for="id">Cédula:</label>
+        <input type="text" id="id" name="id" required pattern="[0-9]+">
+      </div>
+      <div>
+        <label for="phone">Teléfono:</label>
+        <input type="text" id="phone" name="phone" required pattern="[0-9]+">
+      </div>
+      <button type="submit">Guardar</button>
+    </form>
+    <ul id="people-list"></ul>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $.getJSON('/data', function(data) {
+        const peopleList = $('#people-list');
+        $.each(data, function(i, person) {
+          const li = $('<li>').text(person.name + ' - ' + person.id + ' - ' + person.phone);
+          peopleList.append(li);
+        });
+      });
+    </script>
+    <div class="button-group">
+      <button id="delete-last" onclick="deleteLast()">Borrar último</button>
+      <script>
+        function deleteLast() {
+          fetch('/delete-last', { method: 'DELETE' })
+            .then(() => window.location.reload())
+            .catch(err => console.error(err));
+        }
+      </script>
+      <button id="delete-all" onclick="deleteAll()">Borrar todos</button>
+      <script>
+        function deleteAll() {
+          fetch('/delete-all', { method: 'DELETE' })
+            .then(() => window.location.reload())
+            .catch(err => console.error(err));
+        }
+      </script>
+   </div>
+    <hr>
+    <footer class="main-footer">
+      <div class="container">
+        <ul>
+            <p class="small">Luis Miguel Rojas Muñoz 2023 &copy;  <a href="https://www.linkedin.com/in/luismiguelrm/"><i class="fab fa-linkedin"></i></a></p>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
